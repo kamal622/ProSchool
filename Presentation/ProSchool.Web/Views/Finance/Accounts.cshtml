@@ -1,0 +1,314 @@
+﻿@using ProSchool.Web.Framework.UI;
+@model  ProSchool.Web.Models.InvoiceReportModel
+
+@{
+    ViewBag.Title = "Accounts";
+    Html.SetActiveMenuItemSystemName("Accounts");
+}
+
+<section class="content-header">
+    <h1>
+
+        Accounts
+        <small>Invoice</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Finance/Accounts"><i class="fa fa-dashboard"></i>Finance</a></li>
+        <li class="active">Accounts</li>
+    </ol>
+</section>
+<section class="content" ng-controller="AccountsController">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tabstudentMain" data-toggle="tab" data-tab-name="StudentInvoice">Invoice By Student</a>
+                            </li>
+                            <li>
+                                <a href="#tabMain" data-toggle="tab" data-tab-name="Students">All Invoices</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tabMain" class="tab-pane">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="txtEmail">Subject</label>
+                                                    <jqx-drop-down-list jqx-instance="ddlSubject" jqx-theme="theme" jqx-height="32" jqx-width="'100%'" jqx-selected-index="0" jqx-display-member="Name" jqx-value-member="Id" jqx-source="SubjectSearchSource" jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="txtEmail">Status</label>
+                                                    <jqx-drop-down-list jqx-instance="ddlStatus" jqx-theme="theme" jqx-height="32" jqx-width="'100%'" jqx-selected-index="0" jqx-display-member="Name" jqx-value-member="Id" jqx-source="[{Id: 0, Name: 'All'},{Id: 1, Name: 'Unpaid'}, {Id: 2, Name: 'Paid'}]" jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="txtStudName">Student Name</label>
+                                                    <jqx-input placeholder="Student Name" jqx-instance="ddlStudentName" jqx-source="FnameSource" jqx-height="32" jqx-width="'100%'" jqx-theme="theme" />
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group" style="padding-top:5px;">
+                                                    <br />
+                                                    <button type="button" class="btn btn-block btn-primary" style="height: 32px;width:120px;" ng-click="OnViewInvoices()">View Invoices</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 text-right" style="padding-bottom: 10px;">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-info" ng-click="OnFilterClick()"><i class="fa fa-filter"></i></button>
+                                            <button type="button" class="btn btn-info" ng-click="OnRefresh()"><i class="fa fa-refresh"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <jqx-grid jqx-sortable="true" jqx-theme="theme" jqx-filterable="ShowFilter" jqx-showfilterrow="ShowFilter"
+                                          jqx-source="InvoiceSource" jqx-instance="GrdInvoice" jqx-width="'100%'" jqx-filterrowheight="35"
+                                          jqx-columnsheight="40" jqx-rowsheight="35" jqx-selectionmode="'none'" jqx-auto-height="true"
+                                          jqx-columns="[
+                                            { text: 'Id', datafield: 'Id', hidden: true},
+                                            { text: 'Student Name', datafield: 'StudentName', filtertype: 'input' },
+                                            { text: 'Contact No', datafield: 'Mobile', filtertype: 'input', width: 120 },
+                                            { text: 'Division', datafield: 'Department', filtertype: 'input', width: '150' },
+                                            { text: 'Subject', datafield: 'Class', filtertype: 'input', width: '150' },
+                                            { text: 'Invoice Date',datafield: 'InvoiceDate', filtertype: 'input', width: '150',cellsformat: 'dd/MM/yyyy' },
+                                            { text: 'Payment Date',datafield: 'PaymentDate', filtertype: 'input', width: '150',cellsformat: 'dd/MM/yyyy' },
+                                            { text: 'Status', datafield: 'PaymentStatus', filtertype: 'textbox', width: 100 },
+                                            { text: 'Invoice', width: 80 , align: 'center', columntype:'button', buttonclick: SingleStudentInvoice,cellsrenderer: ViewStudentInvoiceCellRenderer},
+                                            { text: 'Delete', width: 60, align: 'center', sortable: false, editable: false, filterable: false, cellsrenderer: DeleteCellRenderer}
+                                  ]"></jqx-grid>
+                                @*{ text: 'Payment Status', datafield: 'IsPaid', filtertype: 'bool', width: '150' ,createwidget: CreateSwitchWidget, initwidget: InitSwitchWidget},
+                                    { text: 'Pay', width: 80, align: 'center', columntype:'button', buttonclick: PayFee, cellsrenderer: PayFeeCellRenderer,sortable: false, editable: false, filterable: false},
+                                         { text: 'Active', datafield: 'Active', width: '95', filtertype: 'bool', align: 'center', createwidget: CreateSwitchWidget, initwidget: InitSwitchWidget},*@
+                            </div>
+                            <div id="tabstudentMain" class="tab-pane  active">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="txtStudSubject">Subject</label>
+                                                    <jqx-drop-down-list jqx-instance="ddlSubjectName" jqx-theme="theme" jqx-height="32" jqx-width="'100%'" jqx-selected-index="0" jqx-display-member="Name" jqx-value-member="Id" jqx-source="SubSearchSource" jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="txtStudName">Student Name</label>
+                                                    <jqx-input placeholder="Student Name" jqx-instance="ddlStudName" jqx-source="StudentFnameSource" jqx-value-member="Id" jqx-height="32" jqx-width="'100%'" jqx-theme="theme" />
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group" style="padding-top:5px;">
+                                                    <br />
+                                                    <button type="button" class="btn btn-block btn-primary" style="height: 32px;width:120px;" ng-click="OnViewSubInvoices()">View Details</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                &nbsp;
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 text-right" style="padding-bottom: 10px;">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-info" ng-click="OnFilterClick()"><i class="fa fa-filter"></i></button>
+
+                                            <button type="button" class="btn btn-info" ng-click="OnRefresh()"><i class="fa fa-refresh"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <jqx-grid jqx-sortable="true" jqx-theme="theme" jqx-filterable="ShowFilter" jqx-showfilterrow="ShowFilter"
+                                          jqx-source="StudentInvoiceSource" jqx-instance="StudGrdInvoice" jqx-width="'100%'" jqx-filterrowheight="35"
+                                          jqx-columnsheight="40" jqx-rowsheight="35" jqx-selectionmode="'none'"
+                                          jqx-columns="[
+                                            { text: 'Id', datafield: 'Id', hidden: true},
+                                            { text: 'Student Name', datafield: 'StudentName', filtertype: 'input' },
+                                            { text: 'Contact No', datafield: 'PhoneNumber', filtertype: 'input', width: 100 },
+                                            { text: 'Division', datafield: 'Department', filtertype: 'input', width: '150' },
+                                            { text: 'Subject', datafield: 'Class', filtertype: 'input', width: '150' },
+                                            { text: 'Batch', datafield: 'Section', filtertype: 'input', width: '150' },
+                                            { text: 'Due Date', datafield: 'NextDueDate', filtertype: 'input', width: '100',cellsformat: 'dd/MM/yyyy' },
+                                            { text: 'Invoice', width: 80, align: 'center', columntype:'button', buttonclick: ViewInvoice, cellsrenderer: ViewInvoiceCellRenderer,sortable: false, editable: false, filterable: false}
+                                            ]"></jqx-grid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <jqx-window jqx-instance="WinPayFee" jqx-theme="theme" jqx-width="480" jqx-height="330" jqx-auto-open="false" jqx-is-modal="true"
+                jqx-animation-type="WindowAnimationType" jqx-resizable="false" jqx-on-close="OnWinPayFeeClose(event)" >  
+        <div><b>Pay Fee</b></div>
+        <div class="row">
+            <div class="col-md-4" ng-show="false">
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        <label title="" class="control-label">Fee</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8" ng-show="false">
+                <div class="form-group">
+                    <jqx-drop-down-list ng-model="Account.FeeId" jqx-theme="theme" jqx-height="32" jqx-width="200" jqx-selected-index="0" jqx-display-member="Name"
+                                        jqx-value-member="Id" jqx-source="FeeSource" jqx-instance="ddlFee" jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        <label title="" class="control-label">Payment Type</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <jqx-drop-down-list ng-model="Account.PaymentType" jqx-instance="ddlPaymentType" jqx-theme="theme" jqx-height="32" jqx-width="150" jqx-selected-index="0" jqx-display-member="Name" jqx-value-member="Id" jqx-auto-drop-down-height="true" jqx-source="[{Id: 1, Name: 'Cash'}, {Id: 2, Name: 'Cheque'}]" jqx-on-change="onPaymentTypeChange(event)"></jqx-drop-down-list>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group" ng-show="!IsPT">
+                    <div class="label-wrapper">
+                        <label title="" class="control-label">Bank Name</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group" ng-show="!IsPT">
+                    <input type="text" class="form-control" id="txtBankName" placeholder="Bank Name" ng-model="Account.BankName" />
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group" ng-show="!IsPT">
+                    <div class="label-wrapper">
+                        <label title="" class="control-label">IFSC Code</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group" ng-show="!IsPT">
+                    <input type="text" class="form-control" id="txtIFSCCode" placeholder="IFSC Code" ng-model="Account.IFSCCode" />
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group" ng-show="false">
+                    <div class="label-wrapper">
+                        <label title="" class="control-label">IsCheque Clear</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group" ng-show="false">
+                    <input id="radBtnYes" type="radio" name="YES" value="1" ng-model="Account.IsChequeClear"> <label for="radBtnYes">YES</label>
+                    <input id="radBtnNo" type="radio" name="NO" value="0" checked ng-model="Account.IsChequeClear"> <label for="radBtnNo">NO</label>
+                </div>
+            </div>
+            <div class="col-md-12  text-right pad">
+                <button class="btn bg-blue" style="width:100px;" ng-click="Pay()">
+                    Pay
+                </button>
+            </div>
+        </div>
+    </jqx-window>
+    <jqx-window jqx-instance="WinViewInvoice" jqx-theme="theme" jqx-width="750" jqx-height="580" jqx-auto-open="false" jqx-is-modal="true"
+                jqx-animation-type="WindowAnimationType" jqx-resizable="true">
+        <div><b>Invoice Details</b></div>
+        <div>
+
+            <div class="col-md-12">
+                <div class="row form-group">
+                    <button type="button" class="btn btn-primary float-right" ng-click="GenerateNewInvoice()" ng-show="GenerateInvoice">Generate Invoice</button>
+                </div>
+            </div>
+
+            <jqx-grid jqx-sortable="true" jqx-theme="theme" jqx-filterable="ShowFilter" jqx-showfilterrow="ShowFilter"
+                      jqx-source="InvoiceFeeSource" jqx-instance="InvoiceGrdFee" jqx-width="'100%'" jqx-filterrowheight="35"
+                      jqx-columnsheight="40" jqx-rowsheight="35" jqx-selectionmode="'none'"
+                      jqx-columns="[
+                                            { text: 'Id', datafield: 'Id', hidden: true},
+                                            { text: 'ProgramId', datafield: 'StudentProgramId', hidden: true},
+                                            { text: 'Invoice Date', datafield: 'InvoiceDate', filtertype: 'range',cellsformat: 'dd/MM/yyyy', width: 100 },
+                                            { text: 'Paid Date', datafield: 'PaymentDate', filtertype: 'range',cellsformat: 'dd/MM/yyyy', width: 100 },
+                                            { text: 'Program', datafield: 'SubjectName', filtertype: 'textbox' },
+                                            { text: 'Payment Type', datafield: 'PaymentType', filtertype: 'textbox' },
+                                            { text: 'Amount', datafield: 'InvoiceAmount', filtertype: 'number', width: 75 },
+                                            { text: 'Status', datafield: 'PaymentStatus', filtertype: 'textbox', width: 100 },
+                                            { text: 'Invoice', filtertype: 'textbox', width: 80 ,align: 'center', columntype:'button', buttonclick: InvoiceByStudent,cellsrenderer: downloadCellRenderer }
+                                         ]"></jqx-grid>
+        </div>
+
+    </jqx-window>
+
+    <jqx-window jqx-instance="WinNewInvoice" jqx-theme="theme" jqx-width="400" jqx-height="150" jqx-auto-open="false" jqx-is-modal="true"
+                jqx-animation-type="WindowAnimationType" jqx-resizable="true">
+        <div><b>Generate New invoice</b></div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        <label title="" class="control-label">Fee Type</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <jqx-drop-down-list ng-model="Account.FeeId" jqx-theme="theme" jqx-height="32" jqx-width="150" jqx-display-member="Name"
+                                        jqx-value-member="Id" jqx-source="FeeSource" jqx-instance="ddlFee" jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                </div>
+            </div>
+            <div class="col-md-12 text-right pad">
+                <button class="btn bg-blue" style="width:150px;" ng-click="GenerateNew()">
+                    Generate Invoice
+                </button>
+            </div>
+        </div>
+    </jqx-window>
+
+    <jqx-window jqx-instance="WinStudentInvoice" jqx-theme="theme" jqx-width="700" jqx-height="950" jqx-auto-open="false" jqx-is-modal="true"
+                jqx-animation-type="WindowAnimationType" jqx-resizable="true">
+        <div><b>Invoice</b></div>
+        <div class="row">
+            <div >
+                <br>
+
+                <div class="pull-right">
+                    @*<div id="SwitchForPayementStatus" style="width: 110px;"></div><br />*@
+                    <div style="width: 150px;">
+                        <input type="radio" name="btnStatus" id="btnPaid" value="Paid" ng-click="radioBtnStatus('Paid')" ><label for="btnPaid">Paid</label>&nbsp;
+                        <input type="radio" name="btnStatus" id="btnUnPaid" value="UnPaid"  ng-click="radioBtnStatus('UnPaid')" ><label for="btnUnPaid">UnPaid</label>
+                    </div>
+                </div>
+                <br><br>
+                <div class="panel panel-default">
+                    @using (Ajax.BeginForm("InvoiceDetails", "Finance", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divRpt" }, new { id = "frmReport" }))
+                    {
+                        @Html.HiddenFor(m => m.Id, new { id = "hdnId" }) 
+                        <div id="divRpt" class="panel-body">
+                            @Html.Partial("_RdlcReportViewer", new ProSchool.Web.Models.ReportViewModels { DataSetName = "DataSet1", ReportParameters = new { }, ReportPath = Request.MapPath(Request.ApplicationPath) + @"Reports\Invoice.rdlc", ReportDataSource = Model.ReportDataSource })
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </jqx-window>
+
+
+</section>
+@section scripts {
+    <script type="text/javascript" src="~/js/Finance/AccountsController.js"></script>
+}

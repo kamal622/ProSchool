@@ -1,0 +1,322 @@
+﻿
+@using ProSchool.Web.Framework.UI;
+@{
+    ViewBag.Title = "Inquiry";
+    Html.SetActiveMenuItemSystemName("Inquiry");
+}
+
+<section class="content-header">
+    <h1>
+        Inquiry
+        <small>Student inquiry list</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Academics/Inquiry"><i class="fa fa-dashboard"></i>Academics</a></li>
+        <li class="active">Inquiry</li>
+    </ol>
+</section>
+<section class="content" ng-controller="InquiryController">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tabMain" data-toggle="tab" data-tab-name="Inquiry">Inquiry</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tabMain" class="tab-pane active">
+                                <div class="row">
+                                   <div class="col-md-1">
+                                        <div class="form-group">
+                                            <jqx-radio-button name="radio" jqx-theme="theme" id="allstudent" value="3" jqx-checked="true" ng-change="OnSearChclick(event)" ng-model="RegisterStatusId" />
+                                            <label for="Allstudent">All</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <jqx-radio-button name="radio" jqx-theme="theme" id="registerstudent" value="1" ng-change="OnSearChclick(event)" ng-model="RegisterStatusId" />
+                                            <label for="txtRegisterYes">Register</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <jqx-radio-button name="radio" jqx-theme="theme" id="notregisterstudent" value="2" ng-change="OnSearChclick(event)" ng-model="RegisterStatusId" />
+                                            <label for="txtRegisterNo">Not register</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9 text-right" style="padding-bottom: 10px;">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-info" ng-click="OnAddNew()"><i class="fa fa-plus"></i></button>
+                                            <button type="button" class="btn btn-info" ng-click="OnFilterClick()"><i class="fa fa-filter"></i></button>
+                                            @*<button type="button" class="btn btn-info"><i class="fa fa-file-excel-o"></i></button>
+                                                <button type="button" class="btn btn-info"><i class="fa fa-file-pdf-o"></i></button>
+                                                <button type="button" class="btn btn-info"><i class="fa fa-print"></i></button>*@
+                                            <button type="button" class="btn btn-info" ng-click="OnRefresh()"><i class="fa fa-refresh"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <jqx-grid jqx-sortable="true" jqx-theme="theme" jqx-filterable="ShowFilter" jqx-showfilterrow="ShowFilter"
+                                          jqx-source="InquirySource" jqx-instance="GrdInquiry" jqx-width="'100%'" jqx-filterrowheight="35"
+                                          jqx-columnsheight="40" jqx-rowsheight="35" jqx-selectionmode="'none'"
+                                          jqx-columns="[
+                                            { text: 'Id', datafield: 'Id', hidden: true},
+                                            { text: 'Student Name', datafield: 'Name', filtertype: 'input' },
+                                            { text: 'Contact No', datafield: 'PhoneNumber', filtertype: 'input', width: '150' },
+                                            { text: 'Division', datafield: 'Department', filtertype: 'input', width: '150' },
+                                            { text: 'Subject', datafield: 'Class', filtertype: 'input', width: '150' },
+                                            { text: 'Inquiry Date', datafield: 'InquiryDate', filtertype: 'range', width: '120' ,cellsformat: 'dd/MM/yyyy'},
+                                            { text: 'Register', width: 70, align: 'center', sortable: false, editable: false, filterable: false, cellsrenderer: RegisterCellRenderer},
+                                            { text: 'Edit', width: 50, align: 'center', sortable: false, editable: false, filterable: false, cellsrenderer: EditCellRenderer},
+                                            { text: 'Delete', width: 60, align: 'center', sortable: false, editable: false, filterable: false, cellsrenderer: DeleteCellRenderer}]"></jqx-grid>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <jqx-window jqx-instance="WinAddNew" jqx-theme="theme" jqx-width="700" jqx-height="580" jqx-auto-open="false" jqx-is-modal="true"
+                jqx-animation-type="WindowAnimationType" jqx-resizable="true" jqx-title="ProgramInquiry" >
+        <div></div>
+        <div>
+            <div class="nav-tabs-custom" style="height:460px;">
+                <ul class="nav nav-tabs">
+                    <li id="liStudentInfo" class="active">
+                        <a href="#tabStudentInfo" data-toggle="tab" data-tab-name="Student">Student Info</a>
+                    </li>
+                    <li id="liProgramDetails">
+                        <a href="#tabProgramDetails" data-toggle="tab" data-tab-name="Program" ng-show="IsProgram">Program</a>
+                    </li>
+                    <li id="liEducationDetails">
+                        <a href="#tabEducationDetails" data-toggle="tab" data-tab-name="Education" ng-show="IsEducation">Education</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tabStudentInfo" class="tab-pane active">
+                        <jqx-validator jqx-instance="InquiryValidator" jqx-hint-type="'label'" jqx-rules="Rules" >
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <figure class="imghvr-blur jqx-center-align" ng-click="OnBrowse()" style="width: 100%; height: 100%;">
+                                            <img src="~/images/profile-icon.png">
+                                            <figcaption>
+                                                <br />
+                                                <jqx-button jqx-theme="theme" jqx-width="100" jqx-height="33">Change</jqx-button>
+                                            </figcaption>
+                                            <a href="#"></a>
+                                        </figure>
+                                        @*<img alt="Student Photo" id="txtLogo" src="~/images/profile-icon.png" />*@
+                                        <jqx-file-upload jqx-instance="StudentPhoto" jqx-theme="theme" style="display:none;"
+                                                         jqx-auto-upload="true" jqx-accept="'image/*'"
+                                                         jqx-multiple-files-upload="false"
+                                                         jqx-upload-url="'@Url.Content("~/Academics/UploadStudentPhoto")'"
+                                                         jqx-file-input-name="'fileToUpload'"
+                                                         jqx-on-upload-end="StudentPhoto_UploadEnd(event)"></jqx-file-upload>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txtFName">First Name</label>
+                                            <input type="text" class="form-control" id="txtFName" placeholder="First Name" ng-model="Student.FirstName" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="txtLName">Last Name</label>
+                                            <input type="text" class="form-control" id="txtLName" placeholder="Last Name" ng-model="Student.LastName" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txtMName">Middle Name</label>
+                                            <input type="text" class="form-control" id="txtMName" placeholder="Middle Name" ng-model="Student.MiddleName" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="txtGender">Gender</label>
+                                            <jqx-switch-button jqx-settings="GenderSwitchButtonSettings" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtFName">Registration#</label>
+                                        <input type="text" class="form-control" id="txtRNumber" placeholder="Registration Number" ng-model="Student.RegistrationNo" />
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="txtDesc">Address</label>
+                                        <input name="Address" class="form-control" id="txtAdd" placeholder="Address" ng-model="Student.Address" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtMobile">Mobile </label>
+                                        <input type="text" class="form-control" id="txtMobile" placeholder="Mobile" ng-model="Student.Mobile" maxlength="10"  />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtBD">Birth Date</label>
+                                        <jqx-date-time-input jqx-width="'100%'"
+                                                             jqx-height="32"
+                                                             jqx-theme="theme"
+                                                             jqx-instance="dtDOB"
+                                                             jqx-allow-Null-Date="false" 
+                                                             id="dtbirthdate"
+                                                             ng-model="Student.DOB"></jqx-date-time-input>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtEmail">Email</label>
+                                        <input type="text" class="form-control" id="txtEmail" placeholder="Email" ng-model="Student.Email" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="txtRemark">Remark</label>
+                                        <textarea name="Remark" class="form-control" id="txtRemark" style="height: 55px;" ng-model="Student.Remarks"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            </jqx-validator>
+                    </div>
+                    <div id="tabProgramDetails" class="tab-pane">
+                        <fieldset ng-show="IsRegistered">
+                            <legend>Program</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="txtEmail">Division</label>
+                                        <jqx-drop-down-list jqx-theme="theme"
+                                                            jqx-height="32"
+                                                            jqx-width="'100%'"
+                                                            jqx-selected-index="0"
+                                                            jqx-display-member="Name"
+                                                            jqx-value-member="Id"
+                                                            ng-model="Inquiry.DivisionId"
+                                                            jqx-instance="ddlDivision"
+                                                            jqx-source="DepartmentSource"
+                                                            jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="txtEmail">Subject</label>
+                                        <jqx-drop-down-list jqx-theme="theme"
+                                                            jqx-height="32"
+                                                            jqx-width="'100%'"
+                                                            jqx-selected-index="0"
+                                                            jqx-display-member="Name"
+                                                            jqx-value-member="Id"
+                                                            ng-model="Inquiry.SubjectId"
+                                                            jqx-instance="ddlSubject"
+                                                            jqx-source="ClassSource"
+                                                            jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="IsRegistered">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="txtEmail">Batch</label>
+                                        <jqx-drop-down-list jqx-instance="ddlBatch" jqx-theme="theme" jqx-height="32" jqx-width="'100%'" jqx-selected-index="0" jqx-display-member="Name"
+                                                            jqx-value-member="Id" jqx-source="SectionSource" ng-model="StudentProgram.BatchId" jqx-auto-drop-down-height="true" @*jqx-on-binding-complete="BatchBindingComplete(event)"*@></jqx-drop-down-list>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="txtEmail">Fee</label>
+                                        <jqx-drop-down-list jqx-theme="theme" jqx-height="32" jqx-width="'100%'" jqx-selected-index="0" jqx-display-member="Name"
+                                                            jqx-value-member="Id" jqx-source="FeeSource" jqx-instance="ddlFee" ng-model="StudentProgram.FeeId" jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div id="tabEducationDetails" class="tab-pane">
+                        <fieldset ng-show="IsRegistered">
+                            <legend>Education</legend>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtSchoolName">School</label>
+                                        <input name="SchoolName" class="form-control" id="txtSchoolName" placeholder="School Name" ng-model="Student.School" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtCollegeName">College</label>
+                                        <input name="CollegeName" class="form-control" id="txtCollegeName" placeholder="College Name" ng-model="Student.College" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtSchoolAddress">Address</label>
+                                        <input name="SchoolAddress" class="form-control" id="txtSchoolAddress" placeholder="Address" ng-model="Student.SCAddress" />
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset ng-show="IsRegistered">
+                            <legend>Emergency Contact Information</legend>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtContactName">Name</label>
+                                        <input name="ContactName" class="form-control" id="txtContactName" placeholder="Name" ng-model="Student.ContactName" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtContactPhone">Phone</label>
+                                        <input name="ContactPhone" class="form-control" id="txtContactPhone" placeholder="Phone" ng-model="Student.ContactNumber" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtContactRelation">Relation</label>
+                                        <input name="ContactRelation" class="form-control" id="txtContactRelation" placeholder="Relation" ng-model="Student.ContactRelation" />
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="form-group" style="padding-right:7px;">
+                        <button type="button" class="btn btn-block btn-primary button-width float-right" ng-click="OnSaveInquiry()">Save</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </jqx-window>
+   
+
+</section>
+@section scripts {
+    <script type="text/javascript" src="~/js/Academics/InquiryController.js"></script>
+}
+
+<style type="text/css">
+    .jqx-validator-error-label {
+        display: none !important;
+    }
+</style>
+
+

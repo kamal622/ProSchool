@@ -1,0 +1,113 @@
+﻿@using ProSchool.Web.Framework.UI;
+@model ProSchool.Web.Models.DashboardViewModel
+
+@{
+    ViewBag.Title = "Dashboard";
+    Html.SetActiveMenuItemSystemName("Dashboard");
+}
+
+<div ng-controller="HomeController" class="content">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Dashboard
+            <small>Optional description</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="box">
+                    <div class="box-body text-center bg-aqua-active">
+                        <img alt="Alchemy Music School" src="~/images/logo.jpg" width="100" height="100" />
+                        <h4 class="box-title text-center">Alchemy Music School</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="box">
+                    <div class="box-body text-center bg-aqua-active" style="height:160px;">
+                        <h3 class="text-center">STUDENTS</h3>
+                        <h3>@Model.StudentActiveCount | @Model.StudentInActiveCount</h3>
+                        <b>Active | Inactive</b>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="box">
+                    <div class="box-body text-center bg-aqua-active" style="height:160px;">
+                        <h3 class="text-center">PAYMENTS</h3>
+                        <h3>@Model.OverDueCounts |@Model.NextDueCounts</h3>
+                        <b>OverDue | NextDue</b>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="box">
+                    <div class="box-body text-center bg-aqua-active" style="height:160px;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Payments</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                        <!-- /.box-tools -->
+                    </div>
+                    <div class="box-body" style="width: 100%; height: 1000px;">
+                        <div class="row">
+                            <div class="col-md-12 text-right" style="padding-bottom: 10px;">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-info" ng-click="OnFilterClick()"><i class="fa fa-filter"></i></button>
+                                    @*<button type="button" class="btn btn-info"><i class="fa fa-file-excel-o"></i></button>
+                                    <button type="button" class="btn btn-info"><i class="fa fa-file-pdf-o"></i></button>
+                                    <button type="button" class="btn btn-info"><i class="fa fa-print"></i></button>*@
+                                    <button type="button" class="btn btn-info" ng-click="OnRefresh()"><i class="fa fa-refresh"></i></button>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-right" style="padding-bottom: 10px;">
+                                <jqx-grid jqx-sortable="true" jqx-theme="theme" jqx-filterable="ShowFilter" jqx-showfilterrow="ShowFilter"
+                                          jqx-source="StudentSource" jqx-instance="GrdStudent" jqx-width="'100%'" jqx-filterrowheight="35"
+                                          jqx-columnsheight="40" jqx-rowsheight="35" jqx-selectionmode="'none'"
+                                          jqx-columns="[
+                                            { text: 'Id', datafield: 'Id', hidden: true},
+                                            { text: 'Student Name', datafield: 'StudentName', filtertype: 'input' },
+                                            { text: 'Contact No', datafield: 'PhoneNumber', filtertype: 'input', width: 100 },
+                                            { text: 'Division', datafield: 'Department', filtertype: 'input', width: '150' },
+                                            { text: 'Subject', datafield: 'Class', filtertype: 'input', width: '150' },
+                                            { text: 'Batch', datafield: 'Section', filtertype: 'input', width: '150' },
+                                            { text: 'Due Date', datafield: 'NextDueDate', filtertype: 'input', width: '100',cellsformat: 'dd/MM/yyyy' },
+                                            { text: 'Active', datafield: 'Active', width: '95', filtertype: 'bool', align: 'center', createwidget: CreateSwitchWidget, initwidget: InitSwitchWidget}
+                                           ]"></jqx-grid>
+                                @*{ text: 'Status', datafield: 'Status', filtertype: 'input', width: '100' },
+                                  { text: 'Invoice', width: 80, align: 'center', columntype:'button', buttonclick: GenerateInvoice, cellsrenderer: GenerateInvoiceCellRenderer,sortable: false, editable: false, filterable: false}*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/Dashboard/DashboardMain.js"></script>
+}
+
+

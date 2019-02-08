@@ -1,0 +1,182 @@
+﻿
+@using ProSchool.Web.Framework.UI;
+@{
+    ViewBag.Title = "Registrations";
+    Html.SetActiveMenuItemSystemName("Registrations");
+}
+
+<section class="content-header">
+    <h1>
+        Registrations
+        <small>Registration list</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Academics/Registrations"><i class="fa fa-dashboard"></i>Processes</a></li>
+        <li class="active">Registrations</li>
+    </ol>
+</section>
+<section class="content" ng-controller="RegistrationController">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tabMain" data-toggle="tab" data-tab-name="Students">Registrations</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tabMain" class="tab-pane active">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="txtDivision">Division</label>
+                                                    <jqx-drop-down-list jqx-instance="ddlDivision" jqx-theme="theme" jqx-height="32" jqx-width="'100%'" jqx-selected-index="0" jqx-display-member="Name" jqx-value-member="Id" jqx-source="DepartmentSearchSource" jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="txtBatch">Batch</label>
+                                                    <jqx-drop-down-list jqx-instance="ddlBatch" jqx-theme="theme" jqx-height="32" jqx-width="'100%'" jqx-selected-index="0" jqx-display-member="Name" jqx-value-member="Id" jqx-source="SectionSearchSource" jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="txtSubject">Subject</label>
+                                                    <jqx-drop-down-list jqx-instance="ddlSubject" jqx-theme="theme" jqx-height="32" jqx-width="'100%'" jqx-selected-index="0" jqx-display-member="Name" jqx-value-member="Id" jqx-source="SubjectSearchSource" jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group" style="padding-top:5px;">
+                                                    <br />
+                                                    <button type="button" class="btn btn-block btn-primary" style="height: 32px;width:120px;" ng-click="OnSearChclick()">Search</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 text-right" style="padding-bottom: 10px;">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-info" ng-click="OnFilterClick()"><i class="fa fa-filter"></i></button>
+                                            @*<button type="button" class="btn btn-info"><i class="fa fa-file-excel-o"></i></button>
+                                                <button type="button" class="btn btn-info"><i class="fa fa-file-pdf-o"></i></button>
+                                                <button type="button" class="btn btn-info"><i class="fa fa-print"></i></button>*@
+                                            <button type="button" class="btn btn-info" ng-click="OnRefresh()"><i class="fa fa-refresh"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <jqx-grid jqx-sortable="true" jqx-theme="theme" jqx-filterable="ShowFilter" jqx-showfilterrow="ShowFilter"
+                                          jqx-source="StudentSource" jqx-instance="GrdStudent" jqx-width="'100%'" jqx-filterrowheight="35"
+                                          jqx-columnsheight="40" jqx-rowsheight="35" jqx-selectionmode="'none'" jqx-auto-height="true" 
+                                          jqx-columns="[
+                                            { text: 'Id', datafield: 'Id', hidden: true},
+                                            { text: 'StudentId', datafield: 'StudentId', hidden: true},
+                                            { text: 'Student Name', datafield: 'StudentName', filtertype: 'input' },
+                                            { text: 'Contact No', datafield: 'PhoneNumber', filtertype: 'input', width: 120 },
+                                            { text: 'Division', datafield: 'Department', filtertype: 'input', width: '150' },
+                                            { text: 'Subject', datafield: 'Class', filtertype: 'input', width: '150' },
+                                            { text: 'Batch', datafield: 'Section', filtertype: 'input', width: '150' },
+                                            { text: 'Due Date', datafield: 'NextDueDate', filtertype: 'input', width: '100',cellsformat: 'dd/MM/yyyy' },
+                                            { text: 'Grace Period',align: 'center',cellsrenderer: ExtendDueDate, sortable: false, editable: false, filterable: false},
+                                            { text: 'Active', datafield: 'Active', width: '95', filtertype: 'bool', align: 'center', createwidget: CreateSwitchWidget, initwidget: InitSwitchWidget},
+                                            { text: 'Edit', width: 50, align: 'center', sortable: false, editable: false, filterable: false, cellsrenderer: EditCellRenderer},
+                                            { text: 'Delete', width: 60, align: 'center', sortable: false, editable: false, filterable: false, cellsrenderer: DeleteCellRenderer}
+                                            ]"></jqx-grid>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <jqx-window jqx-instance="Extendwindow" jqx-height="80" jqx-width="250" jqx-resizable="false" jqx-is-modal="true" jqx-auto-open="false" jqx-theme="theme" jqx-animation-type="WindowAnimationType">
+        <div>
+            Grace Period
+        </div>
+        <div class="row">
+            @*<div class="col-md-4 pad">
+                    <div class="label-wrapper">
+                        <label title="" class="control-label">Extend Date</label>
+                    </div>
+                </div>*@
+            <div class="col-md-8">
+                <jqx-date-time-input jqx-width="120"
+                                     jqx-height="32"
+                                     jqx-theme="theme"
+                                     jqx-format-string="'dd/MM/yyyy'"
+                                     jqx-instance="dtExtend"></jqx-date-time-input>
+            </div>
+            <div class="col-md-4">
+                <button class="btn bg-blue" ng-click="SaveExtendDate()">
+                    Save
+                </button>
+            </div>
+        </div>
+    </jqx-window>
+    <jqx-window jqx-instance="WinProgram" jqx-theme="theme" jqx-width="700" jqx-height="230" jqx-auto-open="false" jqx-is-modal="true"
+                jqx-animation-type="WindowAnimationType" jqx-resizable="true">
+        <div>Program</div>
+        <div>
+         <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="txtEmail">Division</label>
+                            <jqx-drop-down-list jqx-theme="theme"
+                                                jqx-height="32"
+                                                jqx-width="'100%'"
+                                                jqx-selected-index="0"
+                                                jqx-display-member="Name"
+                                                jqx-value-member="Id"
+                                                ng-model="Program.DivisionId"
+                                                jqx-instance="divDivision"
+                                                jqx-source="PopupDepartmentSource"
+                                                jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="txtEmail">Subject</label>
+                            <jqx-drop-down-list jqx-theme="theme"
+                                                jqx-height="32"
+                                                jqx-width="'100%'"
+                                                jqx-selected-index="0"
+                                                jqx-display-member="Name"
+                                                jqx-value-member="Id"
+                                                ng-model="Program.SubjectId"
+                                                jqx-instance="divSubject"
+                                                jqx-source="PopupClassSource"
+                                                jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                        </div>
+                    </div>
+            
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="txtEmail">Batch</label>
+                            <jqx-drop-down-list jqx-instance="divBatch" jqx-theme="theme" jqx-height="32" jqx-width="'100%'" jqx-selected-index="0" jqx-display-member="Name"
+                                                jqx-value-member="Id" jqx-source="PopupSectionSource" ng-model="Program.BatchId" jqx-auto-drop-down-height="true" @*jqx-on-binding-complete="BatchBindingComplete(event)"*@></jqx-drop-down-list>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="txtEmail">Fee</label>
+                            <jqx-drop-down-list jqx-theme="theme" jqx-height="32" jqx-width="'100%'" jqx-selected-index="0" jqx-display-member="Name"
+                                                jqx-value-member="Id" jqx-source="PopupFeeSource" jqx-instance="divFee" ng-model="Program.FeeId" jqx-auto-drop-down-height="true"></jqx-drop-down-list>
+                        </div>
+                    </div>
+              
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="form-group" style="padding-right:7px;">
+                        <button type="button" class="btn btn-block btn-primary button-width float-right" ng-click="OnSaveProgram()">Save</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </jqx-window>
+</section>
+@section scripts {
+    <script type="text/javascript" src="~/js/Academics/RegistrationController.js"></script>
+}

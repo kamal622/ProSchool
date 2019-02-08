@@ -1,0 +1,128 @@
+﻿
+@using ProSchool.Web.Framework.UI;
+@{
+    ViewBag.Title = "System";
+    Html.SetActiveMenuItemSystemName("System");
+}
+
+<section class="content-header">
+    <h1>
+        Settings
+        <small>System settings</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Settings/System"><i class="fa fa-dashboard"></i>Settings</a></li>
+        <li class="active">System</li>
+    </ol>
+</section>
+<section class="content" ng-controller="SystemController">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tabGeneral" data-toggle="tab" data-tab-name="GeneralDetails">General Details</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tabGeneral" class="tab-pane active">
+                        <div class="box box-info">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="txtInstitution">Institution Name</label>
+                                                    <input type="text" class="form-control" id="txtInstitution" placeholder="Institution Name" ng-model="System.InstitutionName" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="txtAddress">Address</label>
+                                                    <input type="text" class="form-control" id="txtAddress" placeholder="Address" ng-model="System.Address" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="txtCity">City</label>
+                                                    <input type="text" class="form-control" id="txtCity" placeholder="City" ng-model="System.City"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="txtState">State</label>
+                                                    <input type="text" class="form-control" id="txtState" placeholder="State" ng-model="System.State"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="txtPinCode">PinCode</label>
+                                                    <input type="text" class="form-control" id="txtPinCode" placeholder="PinCode" ng-model="System.Pincode"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="txtPhone">Phone</label>
+                                                    <input type="text" class="form-control" id="txtPhone" placeholder="Phone" ng-model="System.Phone" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="txtAbout">About School</label>
+                                                    <textarea rows="4" type="text" class="form-control" id="txtAbout" placeholder="About School" ng-model="System.AboutSchool"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="txtLogo">School Logo</label><br />
+                                                    <figure class="imghvr-blur jqx-center-align" ng-click="OnBrowse()" style="width: 100%; height: 100%;">
+                                                        <img src="~/images/logo.jpg"/>
+                                                        <figcaption>
+                                                            <br />
+                                                            <jqx-button jqx-theme="theme" jqx-width="100" jqx-height="33">Change</jqx-button>
+                                                        </figcaption>
+                                                        <a href="#"></a>
+                                                    </figure>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <jqx-file-upload jqx-instance="SchoolLogo" jqx-theme="theme" style="display:none;"
+                                                                 jqx-auto-upload="true" jqx-accept="'image/*'"
+                                                                 jqx-multiple-files-upload="false"
+                                                                 jqx-upload-url="'@Url.Content("~/Settings/UploadSchoolLogo")'"
+                                                                 jqx-file-input-name="fileToUpload"
+                                                                 jqx-on-upload-end="SchoolLogo_UploadEnd(event)" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 text-right">
+                                        <button type="button" class="btn btn-block btn-primary button-width float-right" ng-click="onSaveClick()">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts {
+    <script type="text/javascript" src="~/js/Settings/SystemController.js"></script>
+}

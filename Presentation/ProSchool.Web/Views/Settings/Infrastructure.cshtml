@@ -1,0 +1,92 @@
+﻿
+@using ProSchool.Web.Framework.UI;
+@{
+    ViewBag.Title = "Infrastructure";
+    Html.SetActiveMenuItemSystemName("Infrastructure");
+}
+
+<section class="content-header">
+    <h1>
+        Divisions
+        <small>Divisions settings</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Settings/System"><i class="fa fa-dashboard"></i>Settings</a></li>
+        <li class="active">Divisions</li>
+    </ol>
+</section>
+<section class="content" ng-controller="InfraController">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tabClass" data-toggle="tab" data-tab-name="ClassBatch">Divisions</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tabClass" class="tab-pane active">
+                        <div class="row">
+                            <div class="col-md-9">
+
+                            </div>
+                            <div class="col-md-3 text-right" style="padding-bottom: 10px;">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-info" ng-click="OnAddNew()"><i class="fa fa-plus"></i></button>
+                                    <button type="button" class="btn btn-info" ng-click="OnFilterClick()"><i class="fa fa-filter"></i></button>
+                                    @*<button type="button" class="btn btn-info"><i class="fa fa-file-excel-o"></i></button>
+                                    <button type="button" class="btn btn-info"><i class="fa fa-file-pdf-o"></i></button>
+                                    <button type="button" class="btn btn-info"><i class="fa fa-print"></i></button>*@
+                                    <button type="button" class="btn btn-info" ng-click="OnRefresh()"><i class="fa fa-refresh"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <jqx-grid jqx-sortable="true" jqx-editable="true" jqx-theme="theme" jqx-filterable="ShowFilter" jqx-showfilterrow="ShowFilter"
+                                  jqx-source="DepartmentSource" jqx-instance="GrdDivision"
+                                  jqx-selectionmode="'none'" jqx-editmode="'selectedrow'" jqx-width="'100%'" jqx-filterrowheight="35"
+                                  jqx-columnsheight="40" jqx-rowsheight="35" jqx-on-cellendedit="OnCellEndEdit(event)"
+                                  jqx-columns="[
+                                            { text: 'Id', datafield: 'Id', hidden: true, editable: false},
+                                            { text: 'Name', datafield: 'Name', columntype: 'textbox', filtertype: 'input', width: 200 },
+                                            { text: 'Description', datafield: 'Description', columntype: 'textbox', filtertype: 'input'},
+                                            { text: 'Edit', width: 70, align: 'center', sortable: false, editable: false, filterable: false, cellsrenderer: EditCellRenderer},
+                                            { text: 'Delete', width: 50, align: 'center', sortable: false, editable: false, filterable: false, cellsrenderer: DeleteCellRenderer}]"></jqx-grid>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <jqx-window jqx-instance="WinAddNew" jqx-theme="theme" jqx-width="500" jqx-height="230" jqx-auto-open="false" jqx-is-modal="true"
+                 jqx-resizable="false" jqx-keyboard-navigation="false">
+        <div>Add New</div>
+        <div jqx-validator jqx-instance="DivisionValidator" jqx-hint-type="'label'" jqx-rules="Rules" class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="txtName">Name</label>
+                    <input type="text" class="form-control" id="txtName" placeholder="Name" ng-model="Division.Name" tabindex="1" />
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="txtDesc">Description</label>
+                    <input type="text" class="form-control" id="txtDesc" placeholder="Description" ng-model="Division.Description" tabindex="2"/>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <button type="button" class="btn btn-block btn-primary button-width float-right" ng-click="OnSaveDivision()" tabindex="3">Save</button>
+                </div>
+            </div>
+        </div>
+    </jqx-window>
+</section>
+@section scripts {
+    <script type="text/javascript" src="~/js/Settings/InfraController.js"></script>
+}
+
+<style type="text/css">
+    .jqx-validator-error-label {
+        display: none !important;
+    }
+</style>
